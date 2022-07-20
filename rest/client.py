@@ -6,7 +6,7 @@ from requests import Request, Session, Response
 import hmac
 from ciso8601 import parse_datetime
 
-
+TIMEOUT_SECONDS = 5.0
 
 class FtxClient:
     _ENDPOINT = 'https://ftx.com/api/'
@@ -29,7 +29,7 @@ class FtxClient:
     def _request(self, method: str, path: str, **kwargs) -> Any:
         request = Request(method, self._ENDPOINT + path, **kwargs)
         self._sign_request(request)
-        response = self._session.send(request.prepare())
+        response = self._session.send(request.prepare(), timeout=TIMEOUT_SECONDS)
         return self._process_response(response)
 
     def _sign_request(self, request: Request) -> None:
